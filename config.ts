@@ -22,9 +22,9 @@ function getDateAndTime(): string {
 export const DATE_AND_TIME = getDateAndTime();
 
 export const AI_NAME = "MyAI3";
-export const OWNER_NAME = "FirstName LastName";
+export const OWNER_NAME = "Sia Sharma";
 
-export const WELCOME_MESSAGE = `Hello! I'm ${AI_NAME}, an AI assistant created by ${OWNER_NAME}.`
+export const WELCOME_MESSAGE = `Yooo wassuppp! I'm ${AI_NAME}, a silicone bro created by ${OWNER_NAME}.`
 
 export const CLEAR_CHAT_TEXT = "New";
 
