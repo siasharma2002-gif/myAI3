@@ -10,7 +10,6 @@ interface ChatMessage {
   id: number;
   role: Role;
   content: string;
-  // optional flag to show a mini-practice card with this message
   withActivityCard?: boolean;
 }
 
@@ -28,7 +27,6 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement | null>(null);
 
-  // auto-scroll to bottom when messages change
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
@@ -49,7 +47,6 @@ export default function HomePage() {
     setIsLoading(true);
 
     try {
-      // Build a minimal chat history payload for the /api/chat endpoint.
       const payloadMessages = [...messages, userMsg].map(m => ({
         role: m.role,
         content: m.content,
@@ -65,8 +62,6 @@ export default function HomePage() {
         throw new Error(`Request failed with status ${res.status}`);
       }
 
-      // This assumes your API returns JSON like { message: "..." }
-      // Adjust if your route.ts uses a different shape / streaming.
       const data = await res.json();
       const assistantText: string =
         data?.message ?? data?.content ?? "Here’s a small practice you can try.";
@@ -75,7 +70,6 @@ export default function HomePage() {
         id: Date.now() + 1,
         role: 'assistant',
         content: assistantText,
-        // you can later set this based on model output / tags:
         withActivityCard: true,
       };
 
@@ -100,7 +94,6 @@ export default function HomePage() {
         <header className="koa-header">
           <div className="koa-header-left">
             <div className="koa-logo-wrap">
-              {/* Make sure you add /public/koa-logo.png */}
               <Image
                 src="/koa-logo.png"
                 alt="Koa koala logo"
@@ -131,11 +124,8 @@ export default function HomePage() {
                   {msg.role === 'assistant' && (
                     <div className="koa-avatar">🐨</div>
                   )}
-                  <div
-                    className={`koa-bubble koa-bubble-${msg.role}`}
-                  >
+                  <div className={`koa-bubble koa-bubble-${msg.role}`}>
                     <p className="koa-bubble-text">{msg.content}</p>
-
                     {msg.role === 'assistant' && msg.withActivityCard && (
                       <MiniPracticeCard />
                     )}
@@ -172,7 +162,6 @@ export default function HomePage() {
         </section>
       </div>
 
-      {/* Styled-JSX so this file is self-contained */}
       <style jsx global>{`
         :root {
           --koa-mint: #e6f4ec;
@@ -180,8 +169,11 @@ export default function HomePage() {
           --koa-sage: #c4dccd;
           --koa-sand: #f7eee2;
           --koa-coral: #f28b82;
-          --koa-text: #163628;
+          --koa-text: #17372a;
         }
+
+        /* Load cozy fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap');
 
         html,
         body {
@@ -192,13 +184,11 @@ export default function HomePage() {
 
         body {
           background: var(--koa-mint);
-          font-family: 'Nunito', system-ui, -apple-system, BlinkMacSystemFont,
+          font-family: 'Quicksand', system-ui, -apple-system, BlinkMacSystemFont,
             'Segoe UI', sans-serif;
           color: var(--koa-text);
+          letter-spacing: 0.01em;
         }
-
-        /* Import Google Fonts */
-        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Playfair+Display:wght@500;600&display=swap');
 
         .koa-page {
           min-height: 100vh;
@@ -330,7 +320,7 @@ export default function HomePage() {
           border-radius: 18px;
           padding: 10px 12px;
           font-size: 14px;
-          line-height: 1.4;
+          line-height: 1.5;
         }
 
         .koa-bubble-assistant {
@@ -367,6 +357,7 @@ export default function HomePage() {
           font-size: 14px;
           outline: none;
           transition: border-color 0.15s ease, box-shadow 0.15s ease;
+          background: #fdfdfb;
         }
 
         .koa-input:focus {
@@ -400,7 +391,6 @@ export default function HomePage() {
           transform: none;
         }
 
-        /* Mini practice card styles */
         .koa-mini-card {
           margin-top: 6px;
           border-radius: 14px;
